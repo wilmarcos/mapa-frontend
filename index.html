@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa Inmobiliario La Paz — Venta, Alquiler y Anticrético</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+  <!-- ============ CABECERA ============ -->
+  <header class="cabecera">
+    <div class="marca">
+      <div class="logo">📍</div>
+      <div class="marca-txt">
+        <h1>Mapa Inmobiliario</h1>
+        <p>La Paz — Bolivia</p>
+      </div>
+    </div>
+
+    <div class="buscador-global">
+      <span>🔎</span>
+      <input type="text" id="busqueda" placeholder="Buscar por título o dirección…" />
+    </div>
+
+    <nav class="nav-principal">
+      <button class="nav-btn activo" data-vista="explorar">Explorar</button>
+      <button class="nav-btn" data-vista="panel" id="nav-panel" hidden>Panel</button>
+    </nav>
+
+    <div class="cabecera-acciones">
+      <button class="icono-btn" id="btn-favoritos" title="Favoritos">
+        ❤️ <span class="badge" id="badge-fav">0</span>
+      </button>
+      <div id="zona-sesion">
+        <button class="boton boton-borde" id="btn-login">Iniciar sesión</button>
+      </div>
+      <div id="zona-usuario" hidden>
+        <button class="chip-usuario" id="chip-usuario">
+          <span class="avatar" id="avatar-usuario">U</span>
+          <span id="nombre-usuario">Usuario</span>
+          <span class="rol-tag" id="rol-usuario">rol</span>
+        </button>
+        <button class="boton boton-borde" id="btn-logout">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ VISTA: EXPLORAR ============ -->
+  <div class="cuerpo vista" id="vista-explorar">
+
+    <!-- Barra lateral de filtros -->
+    <aside class="lateral">
+      <section class="bloque">
+        <h2>Filtros</h2>
+
+        <div class="campo">
+          <label for="f-operacion">Tipo de transacción</label>
+          <select id="f-operacion">
+            <option value="">Todas</option>
+            <option value="venta">Venta</option>
+            <option value="alquiler">Alquiler</option>
+            <option value="anticretico">Anticrético</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="f-tipo">Tipo de inmueble</label>
+          <select id="f-tipo">
+            <option value="">Todos</option>
+            <option value="casa">Casa</option>
+            <option value="departamento">Departamento</option>
+            <option value="terreno">Terreno</option>
+            <option value="local">Local comercial</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="f-distrito">Distrito</label>
+          <select id="f-distrito"><option value="">Todos</option></select>
+        </div>
+
+        <div class="campo">
+          <label for="f-condicion">Estado del inmueble</label>
+          <select id="f-condicion">
+            <option value="">Cualquiera</option>
+            <option value="nueva">Nueva</option>
+            <option value="usada">Usada</option>
+            <option value="construccion">En construcción</option>
+          </select>
+        </div>
+
+        <div class="precio-fila">
+          <div class="campo">
+            <label for="f-hab">Habitaciones</label>
+            <select id="f-hab">
+              <option value="">Todas</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+              <option value="4">4+</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="f-ban">Baños</label>
+            <select id="f-ban">
+              <option value="">Todos</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="precio-fila">
+          <div class="campo">
+            <label for="f-min">Precio mín. (Bs)</label>
+            <input type="number" id="f-min" placeholder="0" min="0" />
+          </div>
+          <div class="campo">
+            <label for="f-max">Precio máx. (Bs)</label>
+            <input type="number" id="f-max" placeholder="Sin límite" min="0" />
+          </div>
+        </div>
+
+        <button class="boton boton-borrar ancho" id="btn-limpiar">Limpiar filtros</button>
+      </section>
+
+      <section class="bloque">
+        <h2>Contexto urbano</h2>
+        <p class="ayuda">Activa capas de servicios cercanos.</p>
+        <div class="capas" id="capas-urbanas"></div>
+      </section>
+
+      <section class="bloque">
+        <h2>Resumen</h2>
+        <div class="tarjetas-stats">
+          <div class="stat venta"><div class="num" id="st-venta">0</div><div class="et">Venta</div></div>
+          <div class="stat alquiler"><div class="num" id="st-alquiler">0</div><div class="et">Alquiler</div></div>
+          <div class="stat anticretico"><div class="num" id="st-anticretico">0</div><div class="et">Anticrético</div></div>
+        </div>
+        <div class="promedio" id="promedio"></div>
+      </section>
+    </aside>
+
+    <!-- Columna central: listado -->
+    <section class="columna-lista">
+      <div class="lista-cabecera">
+        <h2>Propiedades</h2>
+        <span class="contador" id="contador">0 resultados</span>
+      </div>
+      <div class="lista" id="lista"></div>
+    </section>
+
+    <!-- Mapa -->
+    <main class="zona-mapa">
+      <div id="mapa"></div>
+      <div class="aviso-mapa" id="aviso"></div>
+      <button class="boton-cerca" id="btn-cerca">📍 Cerca de mí (5 km)</button>
+      <div class="leyenda">
+        <h4>Transacción</h4>
+        <div class="fila"><span class="punto venta"></span> Venta</div>
+        <div class="fila"><span class="punto alquiler"></span> Alquiler</div>
+        <div class="fila"><span class="punto anticretico"></span> Anticrético</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ VISTA: PANEL (propietario / inmobiliaria / admin) ============ -->
+  <div class="cuerpo vista" id="vista-panel" hidden>
+    <aside class="lateral lateral-panel">
+      <section class="bloque">
+        <h2>Panel de control</h2>
+        <nav class="menu-panel">
+          <button class="menu-item activo" data-pane="dashboard">📊 Resumen</button>
+          <button class="menu-item" data-pane="mis">🏠 Mis propiedades</button>
+          <button class="menu-item" data-pane="publicar">➕ Publicar</button>
+          <button class="menu-item" data-pane="favoritos">❤️ Favoritos</button>
+        </nav>
+      </section>
+    </aside>
+
+    <main class="panel-contenido">
+      <!-- Resumen -->
+      <section class="pane" id="pane-dashboard">
+        <h2 class="pane-titulo">Resumen de actividad</h2>
+        <div class="tarjetas-panel">
+          <div class="tarjeta-panel"><div class="tp-num" id="dp-pub">0</div><div class="tp-et">Publicadas</div></div>
+          <div class="tarjeta-panel"><div class="tp-num" id="dp-act">0</div><div class="tp-et">Activas</div></div>
+          <div class="tarjeta-panel"><div class="tp-num" id="dp-ven">0</div><div class="tp-et">Vendidas</div></div>
+          <div class="tarjeta-panel"><div class="tp-num" id="dp-fav">0</div><div class="tp-et">Favoritos</div></div>
+        </div>
+        <p class="ayuda" style="margin-top:18px">Bienvenido al panel. Desde aquí gestionas tus publicaciones inmobiliarias.</p>
+      </section>
+
+      <!-- Mis propiedades -->
+      <section class="pane" id="pane-mis" hidden>
+        <div class="pane-cab">
+          <h2 class="pane-titulo">Mis propiedades</h2>
+          <button class="boton boton-acento" id="btn-nueva-desde-panel">➕ Publicar propiedad</button>
+        </div>
+        <div class="tabla-wrap">
+          <table class="tabla">
+            <thead><tr><th>#</th><th>Título</th><th>Transacción</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-mis"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Publicar -->
+      <section class="pane" id="pane-publicar" hidden>
+        <h2 class="pane-titulo" id="titulo-publicar">Publicar nueva propiedad</h2>
+        <div id="form-publicar"></div>
+      </section>
+
+      <!-- Favoritos -->
+      <section class="pane" id="pane-favoritos" hidden>
+        <h2 class="pane-titulo">Mis favoritos</h2>
+        <div class="lista lista-panel" id="lista-favoritos"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============ MODAL: DETALLE ============ -->
+  <div class="fondo-modal" id="modal-detalle">
+    <div class="modal modal-detalle" role="dialog" aria-modal="true">
+      <button class="cerrar flotante" data-cerrar>✕</button>
+      <div id="detalle-contenido"></div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: LOGIN ============ -->
+  <div class="fondo-modal" id="modal-login">
+    <div class="modal modal-chico" role="dialog" aria-modal="true">
+      <div class="modal-cab">
+        <div><h2>Iniciar sesión</h2><p>Ingresa para gestionar tus propiedades.</p></div>
+        <button class="cerrar" data-cerrar>✕</button>
+      </div>
+      <div class="modal-cuerpo">
+        <div class="campo"><label for="login-correo">Correo</label>
+          <input type="email" id="login-correo" placeholder="usuario@gmail.com" /></div>
+        <div class="campo"><label for="login-pass">Contraseña</label>
+          <input type="password" id="login-pass" placeholder="••••••••" /></div>
+        <div class="aviso-form" id="login-error"></div>
+        <div class="cuentas-demo">
+          <b>Cuentas de prueba:</b><br>
+          Propietario → <code>propietario@demo.com</code> / <code>1234</code><br>
+          Inmobiliaria → <code>inmobiliaria@demo.com</code> / <code>1234</code><br>
+          Administrador → <code>admin@demo.com</code> / <code>1234</code>
+        </div>
+      </div>
+      <div class="modal-pie">
+        <button class="boton boton-borde" id="ir-registro">Crear cuenta</button>
+        <button class="boton boton-acento" id="btn-entrar">Ingresar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: REGISTRO ============ -->
+  <div class="fondo-modal" id="modal-registro">
+    <div class="modal modal-chico" role="dialog" aria-modal="true">
+      <div class="modal-cab">
+        <div><h2>Crear cuenta</h2><p>Regístrate para publicar propiedades.</p></div>
+        <button class="cerrar" data-cerrar>✕</button>
+      </div>
+      <div class="modal-cuerpo">
+        <div class="campo"><label for="reg-nombre">Nombre completo</label>
+          <input type="text" id="reg-nombre" placeholder="Juan Pérez" /></div>
+        <div class="campo"><label for="reg-correo">Correo</label>
+          <input type="email" id="reg-correo" placeholder="correo@gmail.com" /></div>
+        <div class="campo"><label for="reg-tel">Teléfono / WhatsApp</label>
+          <input type="text" id="reg-tel" placeholder="59171234567" /></div>
+        <div class="campo"><label for="reg-pass">Contraseña</label>
+          <input type="password" id="reg-pass" placeholder="••••••••" /></div>
+        <div class="campo"><label for="reg-rol">Selecciona tu rol</label>
+          <select id="reg-rol">
+            <option value="comprador">Comprador / Arrendatario</option>
+            <option value="propietario">Propietario</option>
+            <option value="inmobiliaria">Inmobiliaria</option>
+          </select></div>
+        <div class="aviso-form" id="reg-error"></div>
+      </div>
+      <div class="modal-pie">
+        <button class="boton boton-borde" id="ir-login">Ya tengo cuenta</button>
+        <button class="boton boton-acento" id="btn-registrar">Registrarse</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Publica este sitio en Render como sitio estático.
+services:
+  - type: web
+    name: mapa-inmobiliario-web
+    runtime: static
+    buildCommand: echo "Sitio estatico: no requiere build"
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

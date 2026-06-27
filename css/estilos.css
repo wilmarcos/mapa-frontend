@@ -1,0 +1,387 @@
+/* ============================================================
+   estilos.css — Mapa Inmobiliario La Paz
+   Colores por transacción según el proyecto (RF-02):
+   Venta = Azul · Alquiler = Verde · Anticrético = Amarillo
+   ============================================================ */
+
+:root {
+  --ink:        #14211d;
+  --ink-2:      #1d2c27;
+  --linea:      #2c3b36;
+  --panel:      #ffffff;
+  --fondo:      #ecefe9;
+  --texto:      #1a2420;
+  --texto-2:    #5d6b64;
+  --borde:      #d8ddd4;
+
+  --venta:        #2563c9;   --venta-suave:        #e6eefb;
+  --alquiler:     #1f9d57;   --alquiler-suave:     #e3f5ec;
+  --anticretico:  #d99a12;   --anticretico-suave:  #fbf0d6;
+
+  --acento:       #1f9d57;   /* color de acción principal (botones) */
+  --rojo:         #d8453f;
+
+  --radio: 12px;
+  --sombra: 0 6px 24px rgba(21,33,29,.08);
+  --sombra-fuerte: 0 14px 44px rgba(21,33,29,.22);
+  --tit: "Space Grotesk", system-ui, sans-serif;
+  --txt: "Inter", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--txt);
+  color: var(--texto);
+  background: var(--fondo);
+  display: flex; flex-direction: column;
+  height: 100vh; overflow: hidden;
+}
+
+/* ---------------- Cabecera ---------------- */
+.cabecera {
+  background: var(--ink); color: #fff;
+  display: flex; align-items: center; gap: 16px;
+  padding: 11px 18px; border-bottom: 1px solid var(--linea);
+  flex-shrink: 0;
+}
+.marca { display: flex; align-items: center; gap: 11px; }
+.logo {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--venta), var(--alquiler));
+  display: grid; place-items: center; font-size: 19px;
+}
+.marca-txt h1 { font-family: var(--tit); font-size: 17px; font-weight: 700; letter-spacing: -.3px; }
+.marca-txt p { font-size: 11px; color: #9fb1a9; }
+
+.buscador-global {
+  flex: 1; max-width: 380px;
+  display: flex; align-items: center; gap: 8px;
+  background: #25332e; border: 1px solid #32433d;
+  border-radius: 10px; padding: 8px 12px;
+}
+.buscador-global span { opacity: .7; font-size: 13px; }
+.buscador-global input {
+  flex: 1; background: none; border: none; outline: none;
+  color: #fff; font-family: var(--txt); font-size: 14px;
+}
+.buscador-global input::placeholder { color: #8ba097; }
+
+.nav-principal { display: flex; gap: 4px; }
+.nav-btn {
+  background: none; border: none; color: #b6c5be;
+  font-family: var(--txt); font-size: 14px; font-weight: 500;
+  padding: 8px 14px; border-radius: 8px; cursor: pointer;
+}
+.nav-btn:hover { background: #25332e; color: #fff; }
+.nav-btn.activo { background: #2f4039; color: #fff; }
+
+.cabecera-acciones { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.icono-btn {
+  position: relative; background: #25332e; border: 1px solid #32433d;
+  color: #fff; border-radius: 10px; padding: 9px 12px; cursor: pointer; font-size: 14px;
+}
+.icono-btn:hover { background: #2f4039; }
+.badge {
+  position: absolute; top: -6px; right: -6px;
+  background: var(--rojo); color: #fff; font-size: 10px; font-weight: 700;
+  min-width: 17px; height: 17px; border-radius: 9px;
+  display: grid; place-items: center; padding: 0 4px;
+}
+
+.chip-usuario {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #25332e; border: 1px solid #32433d; color: #fff;
+  border-radius: 22px; padding: 5px 12px 5px 5px; cursor: pointer; font-family: var(--txt);
+}
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--acento); color: #fff; font-weight: 600; font-size: 13px;
+  display: grid; place-items: center;
+}
+#nombre-usuario { font-size: 13.5px; font-weight: 500; }
+.rol-tag {
+  font-size: 10px; text-transform: uppercase; letter-spacing: .4px;
+  background: #3a4d46; padding: 2px 7px; border-radius: 10px; color: #cfe0d9;
+}
+#zona-usuario { display: flex; align-items: center; gap: 8px; }
+
+/* Botones genéricos */
+.boton {
+  font-family: var(--txt); font-size: 13.5px; font-weight: 500;
+  border: none; border-radius: 9px; padding: 9px 15px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px; justify-content: center;
+  transition: background .15s, transform .08s, opacity .15s;
+}
+.boton:active { transform: translateY(1px); }
+.boton-acento { background: var(--acento); color: #fff; }
+.boton-acento:hover { background: #1a8a4c; }
+.boton-borde { background: transparent; color: #fff; border: 1px solid #46584f; }
+.boton-borde:hover { background: #25332e; }
+.boton-borrar { background: #fff; color: var(--texto-2); border: 1px solid var(--borde); }
+.boton-borrar:hover { background: var(--fondo); }
+.boton.ancho { width: 100%; margin-top: 4px; }
+
+/* ---------------- Cuerpo y vistas ---------------- */
+.cuerpo { flex: 1; display: flex; min-height: 0; }
+.vista[hidden] { display: none; }
+
+/* ---------------- Barra lateral ---------------- */
+.lateral {
+  width: 320px; flex-shrink: 0; background: var(--panel);
+  border-right: 1px solid var(--borde); overflow-y: auto;
+}
+.bloque { padding: 16px 18px; border-bottom: 1px solid var(--borde); }
+.bloque h2 {
+  font-family: var(--tit); font-size: 12px; font-weight: 600;
+  letter-spacing: 1.1px; text-transform: uppercase; color: var(--texto-2); margin-bottom: 13px;
+}
+.ayuda { font-size: 12px; color: var(--texto-2); margin-bottom: 10px; line-height: 1.4; }
+
+.campo { margin-bottom: 12px; }
+.campo:last-child { margin-bottom: 0; }
+.campo label { display: block; font-size: 12.5px; font-weight: 500; color: var(--texto-2); margin-bottom: 6px; }
+.campo select, .campo input {
+  width: 100%; font-family: var(--txt); font-size: 14px; color: var(--texto);
+  padding: 9px 11px; border: 1px solid var(--borde); border-radius: 9px; background: #fff; outline: none;
+  transition: border .15s, box-shadow .15s;
+}
+.campo select:focus, .campo input:focus { border-color: var(--acento); box-shadow: 0 0 0 3px var(--alquiler-suave); }
+.precio-fila { display: flex; gap: 10px; }
+.precio-fila .campo { flex: 1; }
+
+/* Capas urbanas */
+.capas { display: flex; flex-direction: column; gap: 8px; }
+.capa {
+  display: flex; align-items: center; gap: 9px; font-size: 13.5px; cursor: pointer;
+  padding: 7px 9px; border: 1px solid var(--borde); border-radius: 9px; user-select: none;
+}
+.capa:hover { background: var(--fondo); }
+.capa input { width: 16px; height: 16px; accent-color: var(--acento); }
+
+/* Estadísticas */
+.tarjetas-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.stat { border-radius: 10px; padding: 11px 8px; text-align: center; }
+.stat.venta { background: var(--venta-suave); }
+.stat.alquiler { background: var(--alquiler-suave); }
+.stat.anticretico { background: var(--anticretico-suave); }
+.stat .num { font-family: var(--tit); font-size: 22px; font-weight: 600; line-height: 1; }
+.stat.venta .num { color: var(--venta); }
+.stat.alquiler .num { color: var(--alquiler); }
+.stat.anticretico .num { color: var(--anticretico); }
+.stat .et { font-size: 10.5px; color: var(--texto-2); margin-top: 5px; }
+.promedio { margin-top: 12px; font-size: 12px; color: var(--texto-2); line-height: 1.55; }
+.promedio b { color: var(--texto); }
+
+/* ---------------- Columna de listado ---------------- */
+.columna-lista {
+  width: 340px; flex-shrink: 0; background: var(--fondo);
+  border-right: 1px solid var(--borde); display: flex; flex-direction: column; min-height: 0;
+}
+.lista-cabecera {
+  padding: 15px 18px 10px; display: flex; align-items: baseline; justify-content: space-between;
+  background: var(--fondo);
+}
+.lista-cabecera h2 { font-family: var(--tit); font-size: 12px; font-weight: 600; letter-spacing: 1.1px; text-transform: uppercase; color: var(--texto-2); }
+.contador { font-family: var(--tit); font-size: 13px; font-weight: 600; }
+.lista { flex: 1; overflow-y: auto; padding: 2px 14px 16px; }
+
+.item {
+  background: #fff; border: 1px solid var(--borde); border-left-width: 4px;
+  border-radius: 11px; padding: 12px 13px; margin-bottom: 9px; cursor: pointer;
+  transition: box-shadow .15s, transform .08s;
+}
+.item:hover { box-shadow: var(--sombra); transform: translateY(-1px); }
+.item.venta { border-left-color: var(--venta); }
+.item.alquiler { border-left-color: var(--alquiler); }
+.item.anticretico { border-left-color: var(--anticretico); }
+.item-top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; margin-bottom: 5px; }
+.item h3 { font-size: 14px; font-weight: 600; line-height: 1.25; }
+.etiqueta {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px;
+  padding: 3px 7px; border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+}
+.etiqueta.venta { background: var(--venta-suave); color: var(--venta); }
+.etiqueta.alquiler { background: var(--alquiler-suave); color: var(--alquiler); }
+.etiqueta.anticretico { background: var(--anticretico-suave); color: #a9730a; }
+.item .precio { font-family: var(--tit); font-size: 16px; font-weight: 600; margin: 3px 0 6px; }
+.item .meta { font-size: 12px; color: var(--texto-2); display: flex; flex-wrap: wrap; gap: 3px 9px; }
+.item .meta span { display: inline-flex; align-items: center; gap: 3px; }
+.item .estado-vendida {
+  display: inline-block; margin-top: 7px; font-size: 10.5px; font-weight: 600;
+  color: var(--rojo); background: #fbe6e5; padding: 2px 8px; border-radius: 20px;
+}
+.lista-vacia { text-align: center; padding: 40px 18px; color: var(--texto-2); font-size: 13px; line-height: 1.6; }
+
+/* ---------------- Mapa ---------------- */
+.zona-mapa { flex: 1; position: relative; min-width: 0; }
+#mapa { width: 100%; height: 100%; }
+.aviso-mapa {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%); z-index: 600;
+  background: var(--ink); color: #eaf2ee; font-size: 13px; padding: 9px 16px;
+  border-radius: 24px; box-shadow: var(--sombra-fuerte); opacity: 0; pointer-events: none; transition: opacity .25s; max-width: 80%;
+}
+.aviso-mapa.visible { opacity: 1; }
+.boton-cerca {
+  position: absolute; top: 14px; right: 14px; z-index: 600;
+  background: #fff; border: 1px solid var(--borde); border-radius: 24px;
+  padding: 9px 15px; font-family: var(--txt); font-size: 13px; font-weight: 500; cursor: pointer; box-shadow: var(--sombra);
+}
+.boton-cerca:hover { background: var(--fondo); }
+.leyenda {
+  position: absolute; bottom: 16px; left: 16px; z-index: 500;
+  background: rgba(255,255,255,.95); backdrop-filter: blur(6px);
+  border: 1px solid var(--borde); border-radius: 11px; padding: 11px 13px; box-shadow: var(--sombra);
+}
+.leyenda h4 { font-family: var(--tit); font-size: 10.5px; letter-spacing: .8px; text-transform: uppercase; color: var(--texto-2); margin-bottom: 7px; }
+.leyenda .fila { display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin-bottom: 4px; }
+.leyenda .fila:last-child { margin-bottom: 0; }
+.punto { width: 12px; height: 12px; border-radius: 50%; }
+.punto.venta { background: var(--venta); }
+.punto.alquiler { background: var(--alquiler); }
+.punto.anticretico { background: var(--anticretico); }
+
+/* Marcadores */
+.pin-precio {
+  background: #fff; border: 2px solid; border-radius: 20px; padding: 3px 9px;
+  font-family: var(--tit); font-size: 12px; font-weight: 600; white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(0,0,0,.22); transform: translateY(-50%);
+}
+.pin-precio.venta { border-color: var(--venta); color: var(--venta); }
+.pin-precio.alquiler { border-color: var(--alquiler); color: var(--alquiler); }
+.pin-precio.anticretico { border-color: var(--anticretico); color: #a9730a; }
+.pin-servicio { font-size: 19px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.3)); }
+.marcador-yo { width: 18px; height: 18px; background: var(--rojo); border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 4px rgba(216,69,63,.3); }
+
+/* ---------------- Modales ---------------- */
+.fondo-modal {
+  position: fixed; inset: 0; background: rgba(21,33,29,.55); backdrop-filter: blur(2px);
+  z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.fondo-modal.visible { display: flex; }
+.modal { background: #fff; border-radius: 16px; width: 100%; max-height: 92vh; overflow-y: auto; box-shadow: var(--sombra-fuerte); position: relative; }
+.modal-chico { max-width: 440px; }
+.modal-detalle { max-width: 620px; }
+.modal-cab { padding: 20px 24px 14px; border-bottom: 1px solid var(--borde); display: flex; align-items: flex-start; justify-content: space-between; }
+.modal-cab h2 { font-family: var(--tit); font-size: 19px; font-weight: 600; }
+.modal-cab p { font-size: 13px; color: var(--texto-2); margin-top: 4px; }
+.modal-cuerpo { padding: 18px 24px 6px; }
+.modal-pie { padding: 16px 24px 22px; display: flex; gap: 10px; justify-content: flex-end; }
+.cerrar { background: none; border: none; cursor: pointer; font-size: 20px; color: var(--texto-2); line-height: 1; padding: 3px 7px; border-radius: 6px; }
+.cerrar:hover { background: var(--fondo); }
+.cerrar.flotante { position: absolute; top: 14px; right: 14px; z-index: 5; background: rgba(255,255,255,.9); }
+
+.aviso-form { font-size: 12.5px; color: var(--rojo); min-height: 16px; margin-top: 2px; }
+.cuentas-demo {
+  margin-top: 12px; font-size: 12px; color: var(--texto-2); line-height: 1.7;
+  background: var(--fondo); border-radius: 9px; padding: 11px 13px;
+}
+.cuentas-demo code { background: #fff; border: 1px solid var(--borde); border-radius: 5px; padding: 1px 5px; font-size: 11.5px; }
+
+/* Detalle de propiedad */
+.det-foto {
+  height: 170px; border-radius: 16px 16px 0 0;
+  display: grid; place-items: center; font-size: 54px;
+  background: linear-gradient(135deg, #cfe0d9, #e8eee9);
+}
+.det-cuerpo { padding: 20px 24px 24px; }
+.det-tag { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; padding: 4px 10px; border-radius: 20px; margin-bottom: 9px; }
+.det-tag.venta { background: var(--venta-suave); color: var(--venta); }
+.det-tag.alquiler { background: var(--alquiler-suave); color: var(--alquiler); }
+.det-tag.anticretico { background: var(--anticretico-suave); color: #a9730a; }
+.det-cuerpo h2 { font-family: var(--tit); font-size: 22px; font-weight: 600; line-height: 1.2; }
+.det-dir { font-size: 13.5px; color: var(--texto-2); margin: 5px 0 10px; }
+.det-precio { font-family: var(--tit); font-size: 26px; font-weight: 700; margin-bottom: 14px; }
+.det-iconos { display: flex; gap: 18px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde); }
+.det-iconos div { font-size: 13.5px; color: var(--texto); }
+.det-iconos b { font-family: var(--tit); display: block; font-size: 18px; }
+.det-desc { font-size: 14px; line-height: 1.6; color: var(--texto); margin: 14px 0; }
+.det-servicios { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.servicio-chip { font-size: 12.5px; background: var(--alquiler-suave); color: var(--alquiler); border-radius: 20px; padding: 5px 11px; font-weight: 500; }
+.det-vendedor { font-size: 13px; color: var(--texto-2); margin-bottom: 16px; }
+.det-vendedor b { color: var(--texto); }
+.det-acciones { display: flex; gap: 10px; flex-wrap: wrap; }
+.boton-whatsapp { background: #25d366; color: #fff; }
+.boton-whatsapp:hover { background: #1eb959; }
+.boton-fav { background: #fff; color: var(--texto); border: 1px solid var(--borde); }
+.boton-fav.activo { background: #fbe6e5; color: var(--rojo); border-color: #f3c4c2; }
+.boton-contexto { background: var(--venta-suave); color: var(--venta); }
+
+/* ---------------- Panel ---------------- */
+.lateral-panel { width: 260px; }
+.menu-panel { display: flex; flex-direction: column; gap: 4px; }
+.menu-item {
+  text-align: left; background: none; border: none; font-family: var(--txt);
+  font-size: 14px; color: var(--texto); padding: 10px 12px; border-radius: 9px; cursor: pointer;
+}
+.menu-item:hover { background: var(--fondo); }
+.menu-item.activo { background: var(--alquiler-suave); color: var(--alquiler); font-weight: 600; }
+
+.panel-contenido { flex: 1; overflow-y: auto; padding: 26px 30px; }
+.pane[hidden] { display: none; }
+.pane-titulo { font-family: var(--tit); font-size: 21px; font-weight: 600; margin-bottom: 18px; }
+.pane-cab { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.pane-cab .pane-titulo { margin-bottom: 0; }
+
+.tarjetas-panel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.tarjeta-panel { background: #fff; border: 1px solid var(--borde); border-radius: 14px; padding: 20px; }
+.tp-num { font-family: var(--tit); font-size: 32px; font-weight: 700; color: var(--acento); }
+.tp-et { font-size: 13px; color: var(--texto-2); margin-top: 4px; }
+
+.tabla-wrap { background: #fff; border: 1px solid var(--borde); border-radius: 14px; overflow: hidden; }
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla th { text-align: left; font-size: 11.5px; text-transform: uppercase; letter-spacing: .6px; color: var(--texto-2); background: var(--fondo); padding: 12px 14px; }
+.tabla td { padding: 12px 14px; border-top: 1px solid var(--borde); font-size: 13.5px; }
+.tabla tr:hover td { background: #f8faf7; }
+.tbl-tag { font-size: 10.5px; font-weight: 600; text-transform: uppercase; padding: 3px 8px; border-radius: 14px; }
+.tbl-tag.venta { background: var(--venta-suave); color: var(--venta); }
+.tbl-tag.alquiler { background: var(--alquiler-suave); color: var(--alquiler); }
+.tbl-tag.anticretico { background: var(--anticretico-suave); color: #a9730a; }
+.estado-pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 14px; }
+.estado-pill.activa { background: var(--alquiler-suave); color: var(--alquiler); }
+.estado-pill.vendida { background: #fbe6e5; color: var(--rojo); }
+.estado-pill.inactiva { background: var(--fondo); color: var(--texto-2); }
+.acc-btn { background: none; border: 1px solid var(--borde); border-radius: 7px; padding: 5px 10px; font-size: 12.5px; cursor: pointer; margin-right: 6px; }
+.acc-btn:hover { background: var(--fondo); }
+.acc-btn.eliminar { color: var(--rojo); border-color: #f0cbc9; }
+.acc-btn.eliminar:hover { background: #fbe6e5; }
+
+/* Formulario de publicar */
+.form-rejilla { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; background: #fff; border: 1px solid var(--borde); border-radius: 14px; padding: 22px; }
+.form-rejilla .ancho-total { grid-column: 1 / -1; }
+.form-servicios { display: flex; flex-wrap: wrap; gap: 14px; }
+.form-servicios label { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; color: var(--texto); cursor: pointer; }
+.form-servicios input { width: 16px; height: 16px; accent-color: var(--acento); }
+#mini-mapa { height: 240px; border-radius: 11px; border: 1px solid var(--borde); }
+.pista-coord { font-size: 12.5px; color: var(--texto-2); background: var(--fondo); border-radius: 9px; padding: 10px 12px; line-height: 1.5; }
+.pista-coord b { color: var(--acento); }
+.form-acciones { grid-column: 1 / -1; display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+
+.lista-panel { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; overflow: visible; padding: 0; }
+
+/* Popup leaflet */
+.leaflet-popup-content-wrapper { border-radius: 12px; }
+.leaflet-popup-content { margin: 13px 15px; font-family: var(--txt); }
+.pop h3 { font-size: 14.5px; margin-bottom: 3px; }
+.pop .pp { font-family: var(--tit); font-size: 16px; font-weight: 600; margin: 2px 0 7px; }
+.pop button { width: 100%; }
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 1100px) {
+  .columna-lista { width: 290px; }
+  .lateral { width: 280px; }
+}
+@media (max-width: 920px) {
+  body { overflow: auto; height: auto; }
+  .cuerpo { flex-direction: column; height: auto; }
+  .lateral, .columna-lista { width: 100%; border-right: none; border-bottom: 1px solid var(--borde); }
+  .columna-lista { max-height: 360px; }
+  .zona-mapa { height: 60vh; min-height: 420px; }
+  .buscador-global { max-width: none; order: 5; flex-basis: 100%; }
+  .cabecera { flex-wrap: wrap; }
+  .tarjetas-panel { grid-template-columns: 1fr 1fr; }
+  .form-rejilla { grid-template-columns: 1fr; }
+}
+
+:focus-visible { outline: 3px solid var(--venta); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
